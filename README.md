@@ -9,7 +9,7 @@ Clasp is an independent, community-built open-source Android companion for Nothi
 
 ## Status
 
-Clasp is in foundation development. The current Android application is a minimal project shell; capture, search, OCR, voice, and AI features have not been implemented yet.
+Clasp is in Phase 1 development. The Android application now supports offline text capture, image and document import, Android Sharesheet input, a durable local library, editable capture details, favourites, export, and permanent deletion. OCR, search, voice, and AI features have not been implemented yet.
 
 The first supported-device baseline is:
 
@@ -32,6 +32,16 @@ Clasp does not artificially block other Android 12+ devices, but those devices a
 - Original Clasp assets and layouts; no Nothing logos, proprietary fonts, Glyph artwork, or copied Essential Space screens.
 
 See [Product plan](docs/PRODUCT_PLAN.md), [Architecture](docs/ARCHITECTURE.md), and [Privacy](docs/PRIVACY.md).
+
+## Current Phase 1 capabilities
+
+- Create text captures inside Clasp.
+- Import images through Android Photo Picker.
+- Import documents through Storage Access Framework.
+- Receive shared text, images, and application files.
+- Copy attachments immediately into app-private storage under generated filenames.
+- Browse, edit, favourite, export, and permanently delete captures.
+- Work without an account, Firebase, AI configuration, or network access.
 
 ## Planned MVP
 
@@ -67,12 +77,12 @@ Use the checked-in Gradle wrapper:
 Run foundation verification with:
 
 ```bash
-./gradlew testDebugUnitTest lintDebug assembleDebug
+./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest
 ```
 
 Do not commit `local.properties`, signing material, Gemini keys, user captures, or generated build output.
 
-Firebase Crashlytics is planned for Phase 1. It will be present in project builds only after the Firebase project exists, disabled by default, explicitly opt-in, and configured without Firebase Analytics or content-bearing logs.
+Firebase Crashlytics remains deferred until a Firebase project exists. It will be disabled by default, explicitly opt-in, and configured without Firebase Analytics or content-bearing logs.
 
 ## Contributing
 

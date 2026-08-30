@@ -36,6 +36,18 @@ com.zen.clasp
     util/
 ```
 
+## Phase 1 implementation
+
+The current single-module implementation contains:
+
+- `model`: capture, attachment, processing, and deletion domain state;
+- `data`: Room entities/DAO/database, repository policy, and app-private attachment storage;
+- `MainViewModel`: lifecycle-aware operation coordination and user-safe error messages;
+- `MainActivity`: Compose capture, library, and detail surfaces plus platform picker/share contracts;
+- `ClaspApplication`: the deliberately small manual application container.
+
+Room schema JSON is exported under `app/schemas`. Schema version 1 is the first public database baseline; every future schema change must add and device-test an explicit migration before release.
+
 ## Technology baseline
 
 - Kotlin, Coroutines, and Flow.

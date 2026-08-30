@@ -2,13 +2,16 @@
 
 This strategy follows the official Android testing pyramid: many small local tests, targeted component/feature tests, and a small number of high-fidelity device journeys.
 
-## Current Phase 0 setup
+## Current Phase 1 setup
 
 - Single Android application module.
 - 100% Jetpack Compose shell.
-- JUnit4 local test dependency.
+- JUnit4 and coroutine-test local dependencies.
 - AndroidX instrumented JUnit and Espresso dependencies.
 - Compose UI test dependencies.
+- Room in-memory database test support.
+- Host tests for domain/ViewModel behaviour.
+- Instrumented Room, hostile content-provider, and Compose capture tests.
 - No dependency-injection framework.
 - No mocking framework, Robolectric, screenshot framework, benchmark module, or device harness yet.
 
@@ -94,13 +97,19 @@ Additionally capture a representative phone screen in light/dark themes and at 1
 
 ## Commands
 
-Phase 0 local/CI gate:
+Local verification gate:
 
 ```bash
-./gradlew testDebugUnitTest lintDebug assembleDebug
+./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest
 ```
 
-Instrumented tests, once configured and an emulator/device is intentionally selected:
+Compile instrumented tests without claiming device validation:
+
+```bash
+./gradlew assembleDebugAndroidTest
+```
+
+Instrumented tests when an emulator/device is intentionally selected:
 
 ```bash
 ./gradlew connectedDebugAndroidTest
@@ -108,11 +117,9 @@ Instrumented tests, once configured and an emulator/device is intentionally sele
 
 Never report device validation from compilation alone.
 
-## CI cadence
+## Hosted verification
 
-- Pull requests and `main`: compile debug, lint debug, and local unit tests.
-- Post-merge later: instrumented application tests.
-- Pre-release later: release-candidate journeys and benchmarks on supported hardware.
+Clasp does not currently configure a hosted Android workflow. Contributors run the local verification gate before opening a pull request. Device tests and release-candidate journeys run only when an emulator or supported device is intentionally selected.
 
 ## Fixtures
 

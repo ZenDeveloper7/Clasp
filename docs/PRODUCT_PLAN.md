@@ -148,10 +148,12 @@ Clasp may visually complement Nothing OS, but uses its own app name, icon, asset
 - Establish licence, contribution, security, product, architecture, privacy, design, and testing documentation.
 - Set Android 12/API 31 minimum and `YYYY.MM.DD.PATCH` versioning.
 - Disable system backup while capture backup semantics remain undefined.
-- Add build/lint/unit-test CI.
+- Document the local build, lint, and unit-test gate.
 - Keep the app as a project shell; no feature implementation.
 
 ### Phase 1 — Durable capture and library
+
+Implementation status: active. The non-Firebase capture, storage, library, detail, export, and deletion slice is implemented in version `2026.08.30.2`; device-flow validation remains before Phase 1 can be closed.
 
 - Capture model, Room schema, migrations, and app-owned file storage.
 - Text/image/file capture and Share receiver.
@@ -164,6 +166,8 @@ Clasp may visually complement Nothing OS, but uses its own app name, icon, asset
   - explicit user opt-in;
   - no Analytics or content-bearing logs;
   - available to project builds, including contributor debug builds.
+
+Firebase is explicitly excluded from the current Phase 1 implementation pass and is not an exit-criteria blocker for the local capture slice.
 
 Exit criteria:
 
