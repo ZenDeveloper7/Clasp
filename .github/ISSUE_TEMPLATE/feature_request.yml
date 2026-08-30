@@ -1,0 +1,25 @@
+name: Feature request
+description: Propose an improvement consistent with Clasp's product and privacy boundaries.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Describe the problem before proposing implementation details.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Permissions, privacy, and offline behaviour
+      description: Explain new data access, network use, permissions, and graceful degradation.
+    validations:
+      required: true

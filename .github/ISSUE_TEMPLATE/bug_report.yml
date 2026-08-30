@@ -1,0 +1,41 @@
+name: Bug report
+description: Report a reproducible Clasp problem using synthetic or redacted data.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not attach private captures, recordings, documents, credentials, or unredacted logs.
+  - type: input
+    id: version
+    attributes:
+      label: Clasp version or commit
+      placeholder: 2026.08.30.1 or commit hash
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android/Nothing OS version
+      placeholder: Nothing Phone (1), Android 15, Nothing OS ...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic content and include expected and actual behaviour.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Redacted diagnostics
+      description: Remove content, queries, filenames, URIs, identifiers, and credentials.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I removed private content and credentials from this report.
+          required: true
