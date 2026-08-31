@@ -10,6 +10,14 @@ import com.zen.clasp.data.AttachmentTooLargeException
 import com.zen.clasp.data.CaptureRepository
 import com.zen.clasp.data.ExportSpec
 import com.zen.clasp.model.Capture
+import com.zen.clasp.search.SearchFilters
+import com.zen.clasp.search.SearchResult
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -37,6 +45,37 @@ class MainViewModel(private val repository: CaptureRepository) : ViewModel() {
 
     private val _exportRequest = MutableStateFlow<ExportRequest?>(null)
     val exportRequest = _exportRequest.asStateFlow()
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
+    private val _searchFilters = MutableStateFlow(SearchFilters())
+    val searchFilters = _searchFilters.asStateFlow()
+
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    val searchResults: StateFlow<List<SearchResult>> = combine(
+        _searchQuery.debounce(150),
+        _searchFilters,
+        captures
+    ) { query, filters, _ -> query to filters }
+        .mapLatest { (query, filters) ->
+            if (query.isBlank()) {
+                emptyList()
+            } else {
+                try {
+                    repository.search(query, filters)
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (_: Exception) {
+                    emptyList()
+                }
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
 
     fun createText(text: String, onSaved: () -> Unit) {
         launchOperation(successMessage = "Text saved", onSuccess = onSaved) {
@@ -92,6 +131,20 @@ class MainViewModel(private val repository: CaptureRepository) : ViewModel() {
     fun exportTo(captureId: String, destination: Uri) {
         launchOperation(successMessage = "Capture exported") {
             repository.export(captureId, destination)
+        }
+    }
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun updateSearchFilters(filters: SearchFilters) {
+        _searchFilters.value = filters
+    }
+
+    fun retryOcr(captureId: String) {
+        launchOperation(successMessage = "OCR queued") {
+            repository.retryOcr(captureId)
         }
     }
 

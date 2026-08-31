@@ -153,7 +153,7 @@ Clasp may visually complement Nothing OS, but uses its own app name, icon, asset
 
 ### Phase 1 — Durable capture and library
 
-Implementation status: active. The non-Firebase capture, storage, library, detail, export, and deletion slice is implemented in version `2026.08.30.2`; device-flow validation remains before Phase 1 can be closed.
+Implementation status: complete except for device-flow validation. The non-Firebase capture, storage, library, detail, export, and deletion slice is implemented; device-flow validation remains before a release is cut.
 
 - Capture model, Room schema, migrations, and app-owned file storage.
 - Text/image/file capture and Share receiver.
@@ -178,9 +178,21 @@ Exit criteria:
 
 ### Phase 2 — OCR and keyword search
 
+Implementation status: complete in the current `2026.08.31.0` development build, with instrumented migration/OCR execution pending a selected emulator or physical device.
+
 - OCR capability and deterministic extraction.
 - Search projection, query normalisation, filters, ranking, and excerpts.
 - Search relevance fixtures and latency baseline.
+
+Implemented decisions:
+
+- Bundled ML Kit Latin text recognition so OCR is available offline on first use.
+- Unique WorkManager jobs per image capture, with explicit pending/running/complete/empty/failed state and retry.
+- AndroidX AppSearch `LocalStorage` for an app-private, offline, rebuildable keyword index; Room remains authoritative.
+- AppSearch relevance ranking with deterministic weights across title, note, original, OCR, and attachment name.
+- Type, favourite, age, and OCR-state filters plus matched-field excerpts.
+- Deterministic link, email, phone, and date candidates; these are labelled suggestions, not generated facts.
+- Host ranking-merge regression fixture with 5,000 synthetic AppSearch hits and a 2,000 ms ceiling. Instrumented AppSearch execution and device benchmarking remain release work.
 
 Exit criteria:
 

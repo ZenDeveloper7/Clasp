@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zen.clasp.model.CaptureType
 import com.zen.clasp.model.DeletionState
+import com.zen.clasp.model.ExtractionState
 import com.zen.clasp.model.ProcessingState
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -40,14 +41,25 @@ class CaptureDaoTest {
         val attachment = attachmentEntity(capture.id)
 
         dao.insert(capture, attachment)
-        val stored = dao.observeAll().first().single()
+        dao.insert(
+            capture.copy(
+                id = "00000000-0000-0000-0000-000000000003",
+                originalText = "Second indexed capture"
+            ),
+            attachment = null
+        )
+        val stored = dao.observeAll().first().first { it.capture.id == capture.id }
         assertEquals(capture, stored.capture)
         assertEquals(listOf(attachment), stored.attachments)
 
         dao.updateFavorite(capture.id, favorite = true, updatedAt = 2)
         assertEquals(true, dao.getById(capture.id)?.capture?.isFavorite)
 
+        dao.updateEditableFields(capture.id, "Searchable title", null, updatedAt = 3)
+        assertEquals("Searchable title", dao.getById(capture.id)?.capture?.userTitle)
+
         dao.deleteById(capture.id)
+        dao.deleteById("00000000-0000-0000-0000-000000000003")
         assertNull(dao.getById(capture.id))
         database.query("SELECT COUNT(*) FROM attachments", null).use { cursor ->
             cursor.moveToFirst()
@@ -66,6 +78,10 @@ class CaptureDaoTest {
         userNote = null,
         isFavorite = false,
         processingState = ProcessingState.STORED.name,
+        extractedText = null,
+        extractionState = ExtractionState.NOT_APPLICABLE.name,
+        extractionErrorCode = null,
+        contentRevision = 1,
         deletionState = DeletionState.ACTIVE.name,
         errorCode = null
     )

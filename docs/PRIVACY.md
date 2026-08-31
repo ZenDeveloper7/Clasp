@@ -4,6 +4,7 @@
 
 - No account is required.
 - Core capture and keyword search are local.
+- Image OCR uses the bundled ML Kit Latin model on device; image content and extracted text are not sent to an OCR service.
 - System backup is disabled during the initial phases.
 - Firebase is not part of Phase 0.
 - Crashlytics is disabled by default when introduced in Phase 1.
@@ -16,6 +17,7 @@
 
 - Attachments live in internal app storage.
 - Structured state lives in an app-private database.
+- Search documents live in an app-private AppSearch `LocalStorage` index and are never registered for system or cross-app search.
 - Android's app sandbox and device file-based encryption are the MVP at-rest boundary.
 - Clasp does not initially claim independent database or attachment encryption.
 - Gemini credentials use Android Keystore-backed protection and are excluded from backup and logs.

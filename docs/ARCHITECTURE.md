@@ -36,17 +36,19 @@ com.zen.clasp
     util/
 ```
 
-## Phase 1 implementation
+## Phase 1 and 2 implementation
 
 The current single-module implementation contains:
 
-- `model`: capture, attachment, processing, and deletion domain state;
-- `data`: Room entities/DAO/database, repository policy, and app-private attachment storage;
+- `model`: capture, attachment, processing, extraction, and deletion domain state;
+- `data`: Room entities/DAO/database, explicit migrations, repository policy, and app-private attachment storage;
+- `processing`: provider-neutral OCR contract, bundled ML Kit implementation, and unique WorkManager jobs;
+- `search`: app-private AppSearch indexing, Unicode query normalization, deterministic filters/ranking, excerpts, and candidate extraction;
 - `MainViewModel`: lifecycle-aware operation coordination and user-safe error messages;
 - `MainActivity`: Compose capture, library, and detail surfaces plus platform picker/share contracts;
 - `ClaspApplication`: the deliberately small manual application container.
 
-Room schema JSON is exported under `app/schemas`. Schema version 1 is the first public database baseline; every future schema change must add and device-test an explicit migration before release.
+Room schema JSON is exported under `app/schemas`. Schema version 1 is the first public database baseline. Version 2 adds extraction state through an explicit `MIGRATION_1_2`; every future schema change must also add and device-test an explicit migration before release. AppSearch is a derived index rather than part of the authoritative Room schema.
 
 ## Technology baseline
 
@@ -57,7 +59,7 @@ Room schema JSON is exported under `app/schemas`. Schema version 1 is the first 
 - WorkManager for durable, deferrable enrichment.
 - Android Photo Picker and Storage Access Framework.
 - Android Sharesheet receive contracts.
-- AppSearch or Room FTS selected during Phase 2 after a focused benchmark.
+- AndroidX AppSearch `LocalStorage` for the app-private Phase 2 keyword index.
 - Android Keystore for provider credentials and encryption keys.
 
 Do not add dependency injection solely to satisfy an architecture diagram. Introduce Hilt before complex runtime fakes or provider graphs make manual construction materially worse.
@@ -80,6 +82,7 @@ Do not add dependency injection solely to satisfy an architecture diagram. Intro
 
 - Owns database transactions and attachment lifecycle.
 - Maintains search projections.
+- Reconciles AppSearch IDs and content revisions from Room after startup or a derived-index failure, updating only changed projections and removing stale ones.
 - Provides observable repositories.
 
 ### Workers

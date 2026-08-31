@@ -15,6 +15,19 @@ User action
 
 The source is persisted before enrichment. Temporary provider URIs are not treated as durable storage.
 
+## Local image extraction
+
+```text
+Stored image
+  -> Unique WorkManager OCR job
+  -> Bundled on-device ML Kit text recognizer
+  -> Persist extracted text separately from the original
+  -> Refresh rebuildable app-private AppSearch projection
+  -> Search/detail UI with OCR provenance
+```
+
+OCR does not upload an image. Failure preserves the original, records a redacted error code, and exposes an explicit retry action.
+
 ## Explicit remote analysis
 
 ```text
@@ -35,13 +48,13 @@ Configuring a provider never starts background uploads. The original remains aut
 
 ```text
 Query entered in Clasp
-  -> Local normalisation
-  -> Local index lookup
-  -> Ranking and snippets
+  -> Unicode NFKC normalisation and bounded prefix tokens
+  -> AppSearch LocalStorage prefix lookup and relevance ranking
+  -> Deterministic field weights, Clasp filters, and AppSearch excerpts
   -> Results
 ```
 
-MVP search queries stay on device. A later web/AI answer mode must be a visually and technically separate action.
+MVP search queries and indexed documents stay inside Clasp's app-private `LocalStorage` index. Room remains authoritative, and Clasp reconciles IDs and content revisions after startup or an indexing failure; a full rebuild remains available for recovery. A later web/AI answer mode must be a visually and technically separate action.
 
 ## Crash reporting (Phase 1)
 

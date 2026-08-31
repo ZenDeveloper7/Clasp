@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [CaptureEntity::class, AttachmentEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class ClaspDatabase : RoomDatabase() {
@@ -22,7 +22,9 @@ abstract class ClaspDatabase : RoomDatabase() {
                 context.applicationContext,
                 ClaspDatabase::class.java,
                 "clasp.db"
-            ).build().also { instance = it }
+            ).addMigrations(MIGRATION_1_2)
+                .build()
+                .also { instance = it }
         }
     }
 }

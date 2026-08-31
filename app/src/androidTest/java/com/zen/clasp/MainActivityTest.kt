@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -20,7 +21,7 @@ class MainActivityTest {
 
         composeRule.onNodeWithText("Text").performClick()
         composeRule.onNode(hasSetTextAction()).performTextInput(content)
-        composeRule.onNodeWithText("Save").performClick()
+        composeRule.onNodeWithContentDescription("Save text capture").performClick()
 
         composeRule.waitUntil(timeoutMillis = 5_000) {
             composeRule.onAllNodesWithText(content).fetchSemanticsNodes().isNotEmpty()

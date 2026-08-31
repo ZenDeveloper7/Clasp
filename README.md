@@ -9,7 +9,7 @@ Clasp is an independent, community-built open-source Android companion for Nothi
 
 ## Status
 
-Clasp is in Phase 1 development. The Android application now supports offline text capture, image and document import, Android Sharesheet input, a durable local library, editable capture details, favourites, export, and permanent deletion. OCR, search, voice, and AI features have not been implemented yet.
+Clasp has completed the Phase 2 implementation pass. The Android application supports offline text capture, image and document import, Android Sharesheet input, a durable local library, editable capture details, favourites, export, permanent deletion, on-device image OCR, and local keyword search. Voice and AI features remain planned work. Device-flow and migration validation are still required before a release is cut.
 
 The first supported-device baseline is:
 
@@ -33,7 +33,7 @@ Clasp does not artificially block other Android 12+ devices, but those devices a
 
 See [Product plan](docs/PRODUCT_PLAN.md), [Architecture](docs/ARCHITECTURE.md), and [Privacy](docs/PRIVACY.md).
 
-## Current Phase 1 capabilities
+## Current capabilities
 
 - Create text captures inside Clasp.
 - Import images through Android Photo Picker.
@@ -41,6 +41,10 @@ See [Product plan](docs/PRODUCT_PLAN.md), [Architecture](docs/ARCHITECTURE.md), 
 - Receive shared text, images, and application files.
 - Copy attachments immediately into app-private storage under generated filenames.
 - Browse, edit, favourite, export, and permanently delete captures.
+- Extract Latin-script image text on device using the bundled ML Kit model.
+- Search titles, notes, original text, OCR text, and attachment names through an app-private AppSearch `LocalStorage` index.
+- Filter results by capture type, favourite state, date range, and OCR state.
+- Show matched-field provenance, ranked excerpts, and deterministic link/email/phone/date candidates.
 - Work without an account, Firebase, AI configuration, or network access.
 
 ## Planned MVP
@@ -58,7 +62,7 @@ Semantic search, device sources, widgets, Quick Settings, backup, synchronisatio
 
 ## Toolchain
 
-- Kotlin 2.2.10
+- Kotlin 2.4.10
 - Jetpack Compose with the Compose BOM
 - Android Gradle Plugin 9.3.2
 - Gradle 9.5.0

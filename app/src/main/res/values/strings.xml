@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Clasp</string>
+    <string name="action_back">Navigate back</string>
+    <string name="action_search">Search captures</string>
+    <string name="action_save">Save text capture</string>
 </resources>

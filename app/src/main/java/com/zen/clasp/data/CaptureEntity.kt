@@ -27,6 +27,10 @@ data class CaptureEntity(
     val userNote: String?,
     val isFavorite: Boolean,
     val processingState: String,
+    val extractedText: String?,
+    val extractionState: String,
+    val extractionErrorCode: String?,
+    val contentRevision: Int,
     val deletionState: String,
     val errorCode: String?
 )

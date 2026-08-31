@@ -104,6 +104,8 @@ class FileAttachmentStore(private val context: Context) {
         }
     }
 
+    fun fileFor(relativePath: String): File = resolve(relativePath)
+
     fun suggestedFileName(displayName: String?, mimeType: String): String {
         val safeName = displayName
             ?.substringAfterLast('/')

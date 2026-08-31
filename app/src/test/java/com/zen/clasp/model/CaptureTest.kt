@@ -40,6 +40,10 @@ class CaptureTest {
         userNote = null,
         isFavorite = false,
         processingState = ProcessingState.STORED,
+        extractedText = null,
+        extractionState = ExtractionState.NOT_APPLICABLE,
+        extractionErrorCode = null,
+        contentRevision = 1,
         deletionState = DeletionState.ACTIVE,
         errorCode = null,
         attachments = attachments

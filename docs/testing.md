@@ -2,16 +2,19 @@
 
 This strategy follows the official Android testing pyramid: many small local tests, targeted component/feature tests, and a small number of high-fidelity device journeys.
 
-## Current Phase 1 setup
+## Current Phase 2 setup
 
 - Single Android application module.
 - 100% Jetpack Compose shell.
 - JUnit4 and coroutine-test local dependencies.
 - AndroidX instrumented JUnit and Espresso dependencies.
 - Compose UI test dependencies.
-- Room in-memory database test support.
+- Room in-memory database test support and instrumented AppSearch `LocalStorage` coverage.
+- Room schema migration fixtures for `1 -> 2`.
+- WorkManager test support and provider-neutral fake OCR coverage.
 - Host tests for domain/ViewModel behaviour.
-- Instrumented Room, hostile content-provider, and Compose capture tests.
+- Host search fixtures for Unicode normalization, deterministic ranking, filters, excerpts, candidate extraction, and latency.
+- Instrumented Room, migration, OCR repository, hostile content-provider, and Compose capture tests.
 - No dependency-injection framework.
 - No mocking framework, Robolectric, screenshot framework, benchmark module, or device harness yet.
 
@@ -94,6 +97,8 @@ Additionally capture a representative phone screen in light/dark themes and at 1
 - Search latency fixtures for small, medium, and large synthetic libraries.
 - OCR memory-pressure tests with bounded large images.
 - Physical-device measurements for battery, thermal, and release-candidate performance.
+
+The current host-side ranking-merge fixture covers 5,000 synthetic AppSearch hits with a deliberately generous 2,000 ms regression ceiling. AppSearch performs lexical matching, field-weighted relevance ranking, paging, and snippets off the main thread. This is a repeatable regression fixture, not a physical-device performance claim.
 
 ## Commands
 
